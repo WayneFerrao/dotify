@@ -3,6 +3,8 @@ import { Button, Container, TextField} from '@material-ui/core';
 import styled from "styled-components";
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 import Login from './Login';
+import CreateAccount from './CreateAccount';
+
  
 const BGContainer = styled.div`
   width: 100vw;
@@ -14,11 +16,11 @@ const Title = styled.div`
   font-family: 'Source Sans Pro';
   font-style: italic;
   font-weight: 900;
-  font-size: 5.5em;
+  font-size: 7.5em;
   text-align: center;
   padding-top: 2%;
   @media (min-width: 1024px) {
-    padding-top:4%;
+    padding-top:2%;
   }
   margin-bottom: 0;
   padding-bottom: 0;
@@ -26,11 +28,10 @@ const Title = styled.div`
 
 const Motto  = styled.h3`
   font-family: 'Source Sans Pro';
-  font-weight: 200;
-  font-size: 1.5em;
+  font-weight: 400;
+  font-size: 2em;
   text-align: center;
   margin-top: 0;
-  padding-top: -3%;
 `;
 
 
@@ -57,7 +58,8 @@ class App extends Component {
     return (
         <Router>
           <div>
-              <Route exact path='' component={Home}/>
+              <Route exact path='/' component={Home}/>
+              <Route exact path='/signup' component={CreateAccount}/>
           </div>
         </Router>
     );

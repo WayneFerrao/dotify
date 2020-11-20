@@ -1,11 +1,14 @@
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Button, Container, TextField} from '@material-ui/core';
+import { TextField} from '@material-ui/core';
 import { withStyles } from "@material-ui/core/styles";
+import { Link } from 'react-router-dom';
+
 const CenterLogin = styled.div`
   width: 300px;
   height: 300px;
   border: solid 2px #000;
+  background-color: #fff;
   border-radius: 10px;
   position: absolute;
   top:0;
@@ -30,39 +33,56 @@ const CenterLogin = styled.div`
   }
   margin-left: auto;
   margin-right: auto;
-  padding-top: 5%;
+  padding-top: 3%;
 `;
 
 const Textfields = styled.input`
-    type:"text";
-    height:30px;
-    width: 200px; 
-    border: none; /* <-- This thing here */
-    border:solid 1px #333;
-    padding: 1%;
-    border-radius: 15px;
+  type:"text";
+  height:30px;
+  width: 225px; 
+  border: none; /* <-- This thing here */
+  border:solid 1px #333;
+  padding: 1%;
+  border-radius: 15px;
 
-    margin-left: 15%;
-    margin-right: auto;
-    margin-bottom: 5%;
+  margin-left: 9%;
+  padding-left: 5%;
+  margin-right: auto;
+  margin-bottom: 5%;
 `;
+
 const LoginButton = styled.button`
-    margin-left: 34%;
-    width: 30%;
-    height: 30px;
-    border: none; /* <-- This thing here */
-    border:solid 1px #333;
-    border-radius: 10px;
-    margin-bottom: 5%;
+  margin-left: 30%;
+  background-color: #1db954;
+  font-family: 'Source Sans Pro';
+  font-weight: 700;
+  color: #fff;
+  font-size: 1.05em;
+  width: 40%;
+  height: 50px;
+  border: none; /* <-- This thing here */
+  border:solid 1px #333;
+  border-radius: 10px;
 `;
+
+const NoAccount = styled.h3`
+  text-align: center;
+`;
+
 const AccountButton = styled.button`
-    margin-left: 25%;
-    width: 50%;
-    height: 30px;
-    border: none; /* <-- This thing here */
-    border:solid 1px #333;
-    border-radius: 10px;
+  margin-left: 15%;
+  cursor: pointer;
+  background-color: #fff;
+  font-family: 'Source Sans Pro';
+  font-weight: 700;
+  font-size: 1.05em;
+  width: 70%;
+  height: 50px;
+  border: none; /* <-- This thing here */
+  border:solid 1px #333;
+  border-radius: 10px;
 `;
+
 // Need to define styles for Material UI Components separately
 const styles = withStyles({
     root: {
@@ -85,22 +105,19 @@ const styles = withStyles({
   })(TextField);
 
 //Functional Component 
-export default function Login(props) {
-    const { classes } = props;
+export default function Login() {
     return (
         <CenterLogin>
             <form noValidate autoComplete="off">
                 <Textfields placeholder="Username" id="username" name="username"/>
                 <Textfields placeholder="Password"  type="password" id="password" name="password"/>
             </form>
-            <LoginButton>Login</LoginButton>
-            <AccountButton>Create Account</AccountButton>
+            <LoginButton>LOG IN</LoginButton>
+            <NoAccount>Don't have an account?</NoAccount>
+
+            <AccountButton>
+              <Link to="/signup">SIGN UP FOR DOTIFY </Link>
+            </AccountButton>
         </CenterLogin>
         );
 }
-
-Login.propTypes = {
-    classes: PropTypes.object.isRequired
-  };
-
-
