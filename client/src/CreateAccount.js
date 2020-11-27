@@ -9,10 +9,16 @@ import DatePicker from "react-datepicker";
 
 import { registerLocale, setDefaultLocale } from  "react-datepicker";
 import format from "date-fns/format";
+import "react-datepicker/dist/react-datepicker.css";
+const BGContainer = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background-color: #1db954;
+`;
 
 const CenterCreation = styled.div`
-  width: 400px;
-  height: 400px;
+  width: 300px;
+  height: 410px;
   border: solid 2px #000;
   background-color: #fff;
   border-radius: 10px;
@@ -31,7 +37,7 @@ const CenterCreation = styled.div`
     margin-top:20%;
   }
   @media (min-width: 1440px) {
-    margin-top:10%;
+    margin-top:15%;
   }
   @media (min-width: 2560px) {
     margin-top:10%;
@@ -39,7 +45,7 @@ const CenterCreation = styled.div`
   }
   margin-left: auto;
   margin-right: auto;
-  padding-top: 3%;
+  padding: 1.1em;
 `;
 
 const Textfields = styled.input`
@@ -57,19 +63,38 @@ const Textfields = styled.input`
   margin-bottom: 5%;
 `;
 
+const CenterContainer = styled.div`
+  text-align:center
+`;
+
+const SubmiteButton = styled.input`
+  type:"submit";
+`;
+
 export default function CreateAccount(){
     const [startDate, setStartDate] = useState(new Date());
         return(
+          <BGContainer>
             <CenterCreation>
                 <form noValidate autoComplete="off">
+                    <CenterContainer><h3>Please fill out the following fields to create your account.</h3></CenterContainer>
+                    <CenterContainer>Email Address</CenterContainer>
                     <Textfields placeholder="Enter your email" id="username" name="username"/>
-                    <Textfields placeholder="Enter your email again" id="username" name="username"/>
+                    <CenterContainer>Password</CenterContainer>
                     <Textfields placeholder="Create a password"  type="password" id="password" name="password"/>
+                    <CenterContainer>Username</CenterContainer>
                     <Textfields placeholder="Enter a username" id="username" name="username"/>
-                    <DatePicker selected={startdate} onChange={date => setStartDate(date)} />
-
+                    <CenterContainer>Birthdate</CenterContainer>
+                    <CenterContainer>
+                      <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
+                    </CenterContainer>
+                    <br/>
+                    <CenterContainer>
+                      <input type="submit" value="Submit"></input>
+                    </CenterContainer>
                 </form>
             </CenterCreation>
+          </BGContainer>
         );
     
 }
