@@ -91,5 +91,5 @@ export default function UpdateQueries() {
             </form>
             <UpdateButton>< Link to="/" style={{ textDecoration: 'none', color: '#fff' }}>Manage Table  </Link></UpdateButton>
         </CenterDiv>
-        );
+    );
 }

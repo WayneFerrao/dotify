@@ -1,11 +1,7 @@
 import {Component} from 'react';
-import { Button, Container, TextField} from '@material-ui/core';
 import styled from "styled-components";
 import {BrowserRouter as Router, Route} from 'react-router-dom';
-import DBControl from './DBControl';
-import CreateAccount from './CreateAccount';
-import UpdateQueries from './UpdateQueries';
-
+import DisplayQueries from './Display';
 
  
 const BGContainer = styled.div`
@@ -53,26 +49,14 @@ class App extends Component {
     const Home = () =>(
       <BGContainer>
         <Title>Dotify</Title>
-        <Motto> Streaming. Made. Simple.</Motto>
-        <Motto> MANAGE TABLES</Motto>
-        <DBControl/>
-      </BGContainer>
-    );
-    const Updates = () =>(
-      <BGContainer>
-        <Title>Dotify</Title>
-        <Motto> Streaming. Made. Simple.</Motto>
-        <Motto> UPDATE QUERIES</Motto>
-        <UpdateQueries/>
+        <Motto>Database Management System</Motto>
+        <DisplayQueries/>
       </BGContainer>
     );
     return (
         <Router>
           <div>
               <Route exact path='/' component={Home}/>
-              <Route exact path='/signup' component={CreateAccount}/>
-              <Route exact path='/update' component={Updates}/>
-
           </div>
         </Router>
     );
