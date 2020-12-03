@@ -1,34 +1,35 @@
-const express = require('express')
+/*
+  REST API for Dotify DBMS.
+*/
+const express = require('express');
 const oracledb = require('oracledb');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 const app = express();
-const port = 3000;
+const port = 5000;
+
+//CHANGE CONNECTION INFORMATION HERE-------------------------------------------------------------------------------
 var username = 'system';
 var password = 'oracle';
+var connectionString = 'localhost:1521/xe';
+//-----------------------------------------------------------------------------------------------------------------
+
+oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
+oracledb.autoCommit = true;
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
+
+app.use(bodyParser.json());
+
+app.use(cors());
 
 // ENDPOINTS-------------------------------------------------------------------------------
 
-//example for user input query
 app.post('/query', function (req, res) {
-  //get post data
-  const name = req.body.query
+  const query = req.body.query
   getQuery(req, res, query);
-})
-
-//example for general query
-app.get('/tracks', function (req, res) {
-  getTracks(req, res);
-})
-
-//example for specific query
-app.get('/user', function (req, res) {
-  //get query param ?id
-  let id = req.query.id;
-  //id param if it is number
-  if (isNaN(id)) {
-      res.send('Query param id is not number')
-      return;
-  }
-  getUser(req, res, id);
 })
 
 // QUERIES-------------------------------------------------------------------------------
@@ -42,24 +43,6 @@ async function getQuery(req, res, userQuery) {
   }
 }
 
-async function getTracks(req, res) {
-    try {
-        query = async() => connection.execute(`SELECT * FROM tracks`);
-        execute(req, res, query);
-    } catch (err) {
-        console.log(err.message);
-    }
-}
-
-async function getUser(req, res, id) {
-    try {
-        query = async() => connection.execute(`SELECT * FROM users where userid = :id`, [id]);
-        execute(req, res, query);
-    } catch (err) {
-        console.log(err.message);
-    }
-}
-
 // HELPERS-------------------------------------------------------------------------------
 
 async function execute(req, res, query){
@@ -67,15 +50,15 @@ async function execute(req, res, query){
         connection = await oracledb.getConnection({
             user: username,
             password: password,
-            connectString: "localhost:1521/xe"
+            connectString: connectionString
           });
         console.log('connected to database');
         
         //run the query
         result = await query();
-    
       } catch (err) {
         //send error message
+        console.log(err);
         return res.send(err.message);
       } finally {
         if (connection) {
@@ -87,13 +70,7 @@ async function execute(req, res, query){
             console.error(err.message);
           }
         }
-        if (result.rows.length == 0) {
-          //query return nothing
-          return res.send('query send no rows');
-        } else {
-          //send result
-          return res.send(result.rows);
-        }
+        return res.send(result.rows);
     }
 }
 
