@@ -1,12 +1,12 @@
+/*
+    Parent container component for all UI.
+*/
 import {Component} from 'react';
 import styled from "styled-components";
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 import DisplayQueries from './Display';
 
- 
 const BGContainer = styled.div`
-  width: 100vw;
-  height: 100vh;
   background-color: #1db954;
 `;
 
@@ -32,8 +32,6 @@ const Motto  = styled.h3`
   margin-top: 0;
 `;
 
-
-// Need to define styles for Material UI Components separately
 const styles = {
   root: {
     background: "black"
@@ -57,6 +55,14 @@ class App extends Component {
         <Router>
           <div>
               <Route exact path='/' component={Home}/>
+              <Route exact path='/display' component={Home}/>
+              <Route exact path='/create' component={Home}/>
+              <Route exact path='/drop' component={Home}/>
+              <Route exact path='/users' component={Home}/>
+              <Route exact path='/tracks' component={Home}/>
+              <Route exact path='/artists' component={Home}/>
+              <Route exact path='/playlists' component={Home}/>
+              <Route exact path='/albums' component={Home}/>
           </div>
         </Router>
     );

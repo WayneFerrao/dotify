@@ -1,5 +1,14 @@
+/*
+    Display component for query ui and results.
+*/
 import styled from "styled-components";
-
+import React, { useState, useEffect } from 'react';
+import Create from './Create'
+import Drop from './Drop'
+import Search from './Search'
+import Add from './Add'
+import Delete from './Delete'
+import Update from './Update'
 const CenterDiv = styled.div`
   text-align: center;
 `;
@@ -13,6 +22,7 @@ const ResultDiv = styled.div`
     color: white;
     height: 20em;
     max-height: 20em;
+    max-width: 100%;
 `;
 
 const QueryButton = styled.button`
@@ -28,8 +38,25 @@ const QueryDetails = styled.p`
     border-radius: 0.5em;
 `;
 
-async function inputQuery(){
-    let data = { query: document.getElementById("query").value };
+const MenuButton = styled.button`
+  margin: 0em 1em;  
+  cursor: pointer;
+  background-color: #fff;
+  font-family: 'Source Sans Pro';
+  font-weight: 700;
+  font-size: 1.05em;
+  width: 10%;
+  height: 50px;
+  border: none; /* <-- This thing here */
+  border:solid 1px #333;
+  border-radius: 10px;
+  a:link {
+    text-decoration: none;
+  }
+`;
+
+async function inputQuery(input){
+    let data = { query: input };
     console.log(JSON.stringify(data));
     let response = await fetch("http://localhost:5000/query",{
         method: 'POST',
@@ -60,39 +87,8 @@ async function inputQuery(){
     }
 }
 
-async function premadeQuery(preQuery){
-    let data = { query: preQuery };
-    console.log(JSON.stringify(data));
-    let response = await fetch("http://localhost:5000/query",{
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-    if (response.ok) { // if HTTP-status is 200-299
-        // get the response body (the method explained below)
-        let json = await response.text();
-        var str = 'HTTP-Response: ' + response.ok + "<br/><br/>";
-        if (!(!json || 0 === json.length)){
-            let obj = JSON.parse(json);
-            for (var i = 0; i < obj.length; i++) {
-                str += "Row " + i + ": " + JSON.stringify(obj[i], null, 4) + "<br><br>";
-            }
-        }
-        document.getElementById("display").innerHTML = str;
-    } else {
-        alert("HTTP-Error: " + response.status);
-    }
-}
-
-function handleSubmit(e) {
-    e.preventDefault();
-    inputQuery();
-}
-
 function query1() {
-    premadeQuery(`
+    inputQuery(`
         SELECT artists.artistname, COUNT(trackid) AS NumOfSongs
         FROM tracks 
         RIGHT JOIN artists ON  tracks.artistid = artists.artistid 
@@ -103,7 +99,7 @@ function query1() {
 }
 
 function query2() {
-    premadeQuery(`
+    inputQuery(`
         SELECT 
         playlists.playlistname,
         COUNT(tracks.trackid) AS NumOfSongs
@@ -118,7 +114,7 @@ function query2() {
 }
 
 function query3() {
-    premadeQuery(`
+    inputQuery(`
         SELECT t.trackname
         FROM tracks t
         WHERE EXISTS
@@ -129,7 +125,7 @@ function query3() {
     `);
 }
 function query4() {
-    premadeQuery(`
+    inputQuery(`
         SELECT MIN(tracklength)
         FROM tracks t
         WHERE EXISTS
@@ -141,7 +137,7 @@ function query4() {
 }
 
 function query5() {
-    premadeQuery(`
+    inputQuery(`
         SELECT artists.artistname, COUNT(trackid) AS NumOfSongs
         FROM tracks 
         RIGHT JOIN artists ON  tracks.artistid = artists.artistid 
@@ -152,7 +148,7 @@ function query5() {
 }
 
 function query6() {
-    premadeQuery(`
+    inputQuery(`
         SELECT *
         FROM albums al
         WHERE NOT EXISTS 
@@ -163,17 +159,49 @@ function query6() {
     `);
 }
 
-//Functional Component 
 export default function DisplayQueries() {
+    const [mode, setMode] = useState('Home');
+    let button = '';
+    useEffect(() => {
+        // Update the document title using the browser API
+        document.title = `${mode}`;
+    }, [mode]);
+    switch(mode) {
+        case 'Home':
+            button=``;
+            break;
+        case 'Create':
+            button=<Create queryFunction={inputQuery}></Create>;
+            break;
+        case 'Drop':
+            button=<Drop queryFunction={inputQuery}></Drop>;
+            break;
+        case 'Search':
+            button=<Search queryFunction={inputQuery}></Search>;
+            break;
+        case 'Add':
+            button=<Add queryFunction={inputQuery}></Add>;
+            break;
+        case 'Delete':
+            button=<Delete queryFunction={inputQuery}></Delete>;
+            break;
+        case 'Update':
+            button=<Update queryFunction={inputQuery}></Update>;
+            break;
+        default:
+            button=``;
+    }
     return (
         <CenterDiv>
             <div>
-                <h3>Custom Query</h3>
-                <form onSubmit={handleSubmit} method="post">
-                    <textarea id="query" rows="10" cols="30" placeholder="Enter query here..."></textarea>
-                    <br/><br/>
-                    <input type="submit"/>
-                </form>
+                <MenuButton onClick={() => {setMode('Create')}}>Create Table</MenuButton>
+                <MenuButton onClick={() => {setMode('Drop')}}>Drop Table</MenuButton>
+                <MenuButton onClick={() => {setMode('Search')}}>Search</MenuButton>
+                <MenuButton onClick={() => {setMode('Add')}}>Add</MenuButton>
+                <MenuButton onClick={() => {setMode('Delete')}}>Delete</MenuButton>
+                <MenuButton onClick={() => {setMode('Update')}}>Update</MenuButton>
+                <br/><br/>
+                {button}
                 <h3>Premade Queries</h3>
                 <QueryDetails>
                     [Query 1] - Get ordered lists of Artists with the most explicit tracks longer than 3 minutes<br/>
